@@ -1,8 +1,12 @@
 package net.landzero.xlog.logback;
 
+import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.PatternLayout;
+import ch.qos.logback.classic.filter.LevelFilter;
+import ch.qos.logback.classic.filter.ThresholdFilter;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.UnsynchronizedAppenderBase;
+import ch.qos.logback.core.spi.FilterReply;
 import net.landzero.xlog.utils.Strings;
 import org.jetbrains.annotations.NotNull;
 
@@ -75,6 +79,44 @@ public abstract class XLogBaseAppender extends UnsynchronizedAppenderBase<ILoggi
 
     public void setEnv(String env) {
         this.env = Strings.normalize(env);
+    }
+
+    /**
+     * use easy syntax to add a common logback filter
+     * <p>
+     * 使用简洁的语法快速添加常见的日志过滤器
+     * <p>
+     * example:
+     *
+     * <code>info</code> == LevelFilter (level INFO, onMatch ACCEPT, onMismatch DENY)
+     * <code>-info</code> == LevelFilter (level INFO, onMatch DENY, onMismatch ACCEPT)
+     * <code>info+</code> == ThresholdFilter (level INFO)
+     *
+     * @param easyFilter easy filter syntax
+     */
+    public void addEasyFilter(String easyFilter) {
+        easyFilter = Strings.normalize(easyFilter);
+        if (easyFilter == null) {
+            return;
+        }
+        easyFilter = easyFilter.toUpperCase();
+        if (easyFilter.endsWith("+")) {
+            ThresholdFilter filter = new ThresholdFilter();
+            filter.setLevel(easyFilter.substring(0, easyFilter.length() - 1));
+            addFilter(filter);
+        } else if (easyFilter.startsWith("-")) {
+            LevelFilter filter = new LevelFilter();
+            filter.setLevel(Level.toLevel(easyFilter.substring(1)));
+            filter.setOnMatch(FilterReply.DENY);
+            filter.setOnMismatch(FilterReply.ACCEPT);
+            addFilter(filter);
+        } else {
+            LevelFilter filter = new LevelFilter();
+            filter.setLevel(Level.toLevel(easyFilter));
+            filter.setOnMatch(FilterReply.ACCEPT);
+            filter.setOnMismatch(FilterReply.DENY);
+            addFilter(filter);
+        }
     }
 
     protected void initLayout() {

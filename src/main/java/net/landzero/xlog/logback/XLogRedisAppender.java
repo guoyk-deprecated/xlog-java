@@ -11,6 +11,7 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class XLogRedisAppender extends XLogBaseAppender {
@@ -34,7 +35,8 @@ public class XLogRedisAppender extends XLogBaseAppender {
     public void addHost(@Nullable String url) {
         url = Strings.normalize(url);
         if (url != null) {
-            this.hosts.add(url);
+            String[] hosts = url.split(",");
+            this.hosts.addAll(Arrays.asList(hosts));
         }
     }
 

@@ -17,7 +17,7 @@
 
     <groupId>net.landzero</groupId>
     <artifactId>xlog</artifactId>
-    <version>0.2.ALPHA03</version>
+    <version>0.2.ALPHA04</version>
 
     <name>${project.groupId}:${project.artifactId}</name>
     <description>XLog for Java</description>
