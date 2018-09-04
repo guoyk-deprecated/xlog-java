@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="PlainFileAppender" class="net.landzero.xlog.logback.XLogFileAppender">
+        <mode>plain</mode> <!-- default is 'plain'，默认即是 'plain' -->
+        <dir>/tmp</dir>
+        <env>test</env>
+        <project>test</project>
+        <topic>test</topic>
+    </appender>
+    <appender name="PlainRedisAppender" class="net.landzero.xlog.logback.XLogRedisAppender">
+        <mode>plain</mode> <!-- default is 'plain'，默认即是 'plain' -->
+        <host>redis://127.0.0.1:6379</host><!-- repeat to add more hosts, 重复标签可以添加多个主机 -->
+        <env>test</env>
+        <project>test</project>
+        <topic>test</topic>
+    </appender>
+    <appender name="JsonFileAppender" class="net.landzero.xlog.logback.XLogFileAppender">
+        <mode>json</mode> <!-- 'topic' is ignored in 'json' mode, 'json' 模式下 'topic' 值会被忽略 -->
+        <dir>/tmp</dir>
+        <env>test</env>
+        <project>test</project>
+    </appender>
+    <appender name="JsonRedisAppender" class="net.landzero.xlog.logback.XLogRedisAppender">
+        <mode>json</mode> <!-- 'topic' is ignored in 'json' mode, 'json' 模式下 'topic' 值会被忽略 -->
+        <host>redis://127.0.0.1:6379</host><!-- repeat to add more hosts, 重复标签可以添加多个主机 -->
+        <env>test</env>
+        <project>test</project>
+    </appender>
+    <logger level="info" name="xlog.Event" additivity="false">
+        <appender-ref ref="JsonFileAppender"/>
+        <appender-ref ref="JsonRedisAppender"/>
+    </logger>
+    <root level="info">
+        <appender-ref ref="PlainFileAppender"/>
+        <appender-ref ref="PlainRedisAppender"/>
+    </root>
+</configuration>
