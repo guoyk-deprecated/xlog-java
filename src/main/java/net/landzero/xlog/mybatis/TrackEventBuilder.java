@@ -60,7 +60,7 @@ public class TrackEventBuilder {
         if (object == null || mappings == null) {
             return null;
         }
-        String sql = boundSql.getSql().replaceAll("[\\s]+", " ");
+        String sql = boundSql.getSql();//.replaceAll("[\\s]+", " ");
         if (mappings.size() > 0) {
             TypeHandlerRegistry registry = configuration.getTypeHandlerRegistry();
             if (registry.hasTypeHandler(object.getClass())) {
