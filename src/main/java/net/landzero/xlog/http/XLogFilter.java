@@ -1,6 +1,10 @@
 package net.landzero.xlog.http;
 
 import net.landzero.xlog.XLog;
+import net.landzero.xlog.utils.Requests;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
 import javax.servlet.*;
@@ -44,6 +48,7 @@ public class XLogFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        request = wrapRequest(request);
         setupXLog(request, response);
         AccessEventBuilder event = new AccessEventBuilder().setServletRequest(request);
         try {
@@ -65,6 +70,17 @@ public class XLogFilter implements Filter {
         }
         MDC.put(MDC_CRID_KEY, XLog.crid());
         MDC.put(MDC_CRID_MARK_KEY, XLog.cridMark());
+    }
+
+    @NotNull
+    private ServletRequest wrapRequest(@NotNull ServletRequest request) throws IOException {
+        if (request instanceof HttpServletRequest) {
+            if (Requests.hasJsonBody((HttpServletRequest) request)) {
+                return new XLogHttpServletRequestWrapper((HttpServletRequest) request);
+            }
+        }
+
+        return request;
     }
 
     private void resetXLog() {

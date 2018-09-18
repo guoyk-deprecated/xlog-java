@@ -10,6 +10,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 
 public class AccessEventBuilder {
 
@@ -33,7 +34,15 @@ public class AccessEventBuilder {
         this.event.setHeaderUserToken(httpRequest.getHeader("UserToken"));
         this.event.setHeaderAppInfo(Flatten.flattenJSON(httpRequest.getHeader("X-Defined-AppInfo")));
         this.event.setHeaderVerInfo(Flatten.flattenJSON(httpRequest.getHeader("X-Defined-VerInfo")));
-        this.event.setParams(Flatten.flattenParameters(httpRequest.getParameterMap()));
+
+        if (request instanceof XLogHttpServletRequestWrapper) {
+            ArrayList<String> params = new ArrayList<String>();
+            params.add(((XLogHttpServletRequestWrapper) request).getBody());
+            this.event.setParams(params);
+        } else {
+            this.event.setParams(Flatten.flattenParameters(httpRequest.getParameterMap()));
+        }
+
         return this;
     }
 
@@ -49,8 +58,10 @@ public class AccessEventBuilder {
         return this;
     }
 
+    @NotNull
     public AccessEvent build() {
         this.event.setDuration(System.currentTimeMillis() - this.startAt);
         return this.event;
     }
+
 }
