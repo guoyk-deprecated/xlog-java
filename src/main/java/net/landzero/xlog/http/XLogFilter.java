@@ -3,8 +3,6 @@ package net.landzero.xlog.http;
 import net.landzero.xlog.XLog;
 import net.landzero.xlog.utils.Requests;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
 import javax.servlet.*;

@@ -2,6 +2,7 @@
 <configuration>
     <appender name="PlainFileAppender" class="net.landzero.xlog.logback.XLogFileAppender">
         <mode>plain</mode> <!-- default is 'plain'，默认即是 'plain' -->
+        <rotate>2</rotate>
         <dir>/tmp</dir>
         <env>test</env>
         <project>test</project>
@@ -16,6 +17,7 @@
     </appender>
     <appender name="JsonFileAppender" class="net.landzero.xlog.logback.XLogFileAppender">
         <mode>json</mode> <!-- 'topic' is ignored in 'json' mode, 'json' 模式下 'topic' 值会被忽略 -->
+        <rotate>2</rotate>
         <dir>/tmp</dir>
         <env>test</env>
         <project>test</project>
