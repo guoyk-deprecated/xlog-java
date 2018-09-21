@@ -1,5 +1,6 @@
 package net.landzero.xlog.example.controller;
 
+import net.landzero.xlog.XLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -12,19 +13,19 @@ public class WelcomeController {
 
     @RequestMapping(value = "/hello", method = {RequestMethod.POST}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public String hello_json(@RequestBody HelloBody hello) {
-        logger.info("hello " + hello.getHello());
+        logger.info("hello " + XLog.keyword(hello.getHello()));
         return "hello " + hello.getHello();
     }
 
     @RequestMapping(value = "/hello", method = {RequestMethod.POST}, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String hello_form(@RequestParam("hello") String hello) {
-        logger.info("hello " + hello);
+        logger.info("hello " + XLog.keyword(hello));
         return "hello " + hello;
     }
 
     @RequestMapping(value = "/hello", method = {RequestMethod.GET})
     public String hello_get(@RequestParam("hello") String hello) {
-        logger.info("hello " + hello);
+        logger.info("hello " + XLog.keyword(hello));
         return "hello " + hello;
     }
 

@@ -22,4 +22,24 @@ public class Strings {
         return s;
     }
 
+    @Nullable
+    public static String normalize(@Nullable Object o) {
+        if (o == null) return null;
+        return normalize(o.toString());
+    }
+
+    @Nullable
+    public static String normalizeKeyword(@Nullable String s) {
+        s = normalize(s);
+        if (s == null) return null;
+        return s.replaceAll("[\\s,\\[\\]]+", "_");
+    }
+
+
+    @Nullable
+    public static String normalizeKeyword(@Nullable Object o) {
+        if (o == null) return null;
+        return normalizeKeyword(o.toString());
+    }
+
 }

@@ -9,7 +9,10 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * This class encapsulates xlog related thread-local variables, and provides convenient accesses
@@ -175,6 +178,21 @@ public class XLog {
         } catch (Exception e) {
             LOGGER.error("failed to serialize structured event [" + event.getClass().getCanonicalName() + "]", e);
         }
+    }
+
+    @NotNull
+    public static String keyword(@Nullable Object... os) {
+        // deny if keywords is too large
+        if (os == null || os.length > 100) return "";
+        return "KEYWORD[" + Arrays
+                .stream(os)
+                // normalize
+                .map(Strings::normalizeKeyword)
+                // skip null
+                .filter(Objects::nonNull)
+                // join with ','
+                .collect(Collectors.joining(","))
+                + "]";
     }
 
     /**

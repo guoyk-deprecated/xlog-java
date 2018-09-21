@@ -24,4 +24,10 @@ public class StringsTest {
         assertFalse(Strings.normalize("a\n") == null);
         assertEquals(Strings.normalize("a\n \t"), "a");
     }
+
+    @Test
+    public void normalizeKeyword() {
+        assertEquals(Strings.normalizeKeyword(",]]]  "), "_");
+        assertEquals(Strings.normalizeKeyword("a,b,c,]]dd "), "a_b_c_dd");
+    }
 }
