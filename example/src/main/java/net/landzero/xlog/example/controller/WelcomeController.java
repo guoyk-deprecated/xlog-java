@@ -9,23 +9,23 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class WelcomeController {
 
-    private static final Logger logger = LoggerFactory.getLogger(WelcomeController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WelcomeController.class);
 
     @RequestMapping(value = "/hello", method = {RequestMethod.POST}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public String hello_json(@RequestBody HelloBody hello) {
-        logger.info("hello " + XLog.keyword(hello.getHello()));
+        LOGGER.info("hello " + XLog.keyword(hello.getHello(), "_test"));
         return "hello " + hello.getHello();
     }
 
     @RequestMapping(value = "/hello", method = {RequestMethod.POST}, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String hello_form(@RequestParam("hello") String hello) {
-        logger.info("hello " + XLog.keyword(hello));
+        LOGGER.info("hello " + XLog.keyword(hello, "_test"));
         return "hello " + hello;
     }
 
     @RequestMapping(value = "/hello", method = {RequestMethod.GET})
     public String hello_get(@RequestParam("hello") String hello) {
-        logger.info("hello " + XLog.keyword(hello));
+        LOGGER.info("hello " + XLog.keyword(hello, "_test"));
         return "hello " + hello;
     }
 
