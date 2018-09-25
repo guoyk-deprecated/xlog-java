@@ -1,5 +1,6 @@
 package net.landzero.xlog.utils;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class Strings {
@@ -28,17 +29,17 @@ public class Strings {
         return normalize(o.toString());
     }
 
-    @Nullable
+    @NotNull
     public static String normalizeKeyword(@Nullable String s) {
         s = normalize(s);
-        if (s == null) return null;
+        if (s == null) return "null";
         return s.replaceAll("[\\s,\\[\\]]+", "_");
     }
 
 
-    @Nullable
+    @NotNull
     public static String normalizeKeyword(@Nullable Object o) {
-        if (o == null) return null;
+        if (o == null) return "null";
         return normalizeKeyword(o.toString());
     }
 

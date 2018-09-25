@@ -8,6 +8,6 @@ public class XLogTest {
 
     @Test
     public void keyword() {
-        assertEquals(XLog.keyword("he,ll,o[]]", 124, null, true), "KEYWORD[he_ll_o_,124,true]");
+        assertEquals(XLog.keyword("he,ll,o[]]", 124, null, true), " K[he_ll_o_,124,null,true]");
     }
 }

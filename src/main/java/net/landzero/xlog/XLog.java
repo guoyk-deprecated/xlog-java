@@ -184,7 +184,7 @@ public class XLog {
     public static String keyword(@Nullable Object... os) {
         // deny if keywords is too large
         if (os == null || os.length > 100) return "";
-        return "KEYWORD[" + Arrays
+        return " K[" + Arrays
                 .stream(os)
                 // normalize
                 .map(Strings::normalizeKeyword)
@@ -193,6 +193,11 @@ public class XLog {
                 // join with ','
                 .collect(Collectors.joining(","))
                 + "]";
+    }
+
+    @NotNull
+    public static String K(@Nullable Object... os) {
+        return keyword(os);
     }
 
     /**
