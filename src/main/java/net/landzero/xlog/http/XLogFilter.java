@@ -1,6 +1,7 @@
 package net.landzero.xlog.http;
 
 import net.landzero.xlog.XLog;
+import net.landzero.xlog.constants.Constants;
 import net.landzero.xlog.utils.Requests;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.MDC;
@@ -23,22 +24,11 @@ public class XLogFilter implements Filter {
      * header name for correlation id
      * <p>
      * CRID 的 HTTP Header 名
-     */
-    public static final String CRID_HEADER_NAME = "X-Correlation-ID";
-
-    /**
-     * MDC key for correlation id
      * <p>
-     * CRID 的 MDC 键值
+     * xlog 1.11 版本使用Constants.CRID_HEADER_NAME替代。
      */
-    public static final String MDC_CRID_KEY = "crid";
-
-    /**
-     * MDC key for correlation id mark
-     * <p>
-     * CRID 标记 的 MDC 键值
-     */
-    public static final String MDC_CRID_MARK_KEY = "cridMark";
+    @Deprecated
+    public static final String CRID_HEADER_NAME = Constants.HTTP_CRID_HEADER;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -66,8 +56,8 @@ public class XLogFilter implements Filter {
         if (response instanceof HttpServletResponse) {
             ((HttpServletResponse) response).setHeader(CRID_HEADER_NAME, XLog.crid());
         }
-        MDC.put(MDC_CRID_KEY, XLog.crid());
-        MDC.put(MDC_CRID_MARK_KEY, XLog.cridMark());
+        MDC.put(Constants.MDC_CRID_KEY, XLog.crid());
+        MDC.put(Constants.MDC_CRID_MARK_KEY, XLog.cridMark());
     }
 
     @NotNull
@@ -84,8 +74,8 @@ public class XLogFilter implements Filter {
     private void resetXLog() {
         XLog.clearCrid();
         XLog.clearPath();
-        MDC.remove(MDC_CRID_KEY);
-        MDC.remove(MDC_CRID_MARK_KEY);
+        MDC.remove(Constants.MDC_CRID_KEY);
+        MDC.remove(Constants.MDC_CRID_MARK_KEY);
     }
 
     @Override
