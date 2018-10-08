@@ -38,7 +38,7 @@ public class Strings {
 
     @NotNull
     public static String safeNormalize(@Nullable Object o) {
-        if (o == null) return "NULL";
+        if (o == null) return "null";
         return safeNormalize(o.toString());
     }
 
