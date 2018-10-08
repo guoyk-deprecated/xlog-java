@@ -30,6 +30,19 @@ public class Strings {
     }
 
     @NotNull
+    public static String safeNormalize(@Nullable String s) {
+        if (s == null)
+            return "";
+        return s.trim();
+    }
+
+    @NotNull
+    public static String safeNormalize(@Nullable Object o) {
+        if (o == null) return "NULL";
+        return safeNormalize(o.toString());
+    }
+
+    @NotNull
     public static String normalizeKeyword(@Nullable String s) {
         s = normalize(s);
         if (s == null) return "null";

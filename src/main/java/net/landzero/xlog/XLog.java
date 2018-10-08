@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -47,28 +46,28 @@ public class XLog {
      * <p>
      * 结构化日志专用的 LOGGER
      */
-    private static final Logger structuredEventLogger = LoggerFactory.getLogger(LOGGER_NAME_STRUCTURED_EVENT);
+    private static final Logger EVENT_LOGGER = LoggerFactory.getLogger(LOGGER_NAME_STRUCTURED_EVENT);
 
     /**
      * use ISO8601 with timezone for #{java.util.Date} serialization
      * <p>
      * 使用带时区的 ISO8601 标准作为 #{java.util.Data} 的序列化格式
      */
-    private static final Gson structuredEventGson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX").create();
+    private static final Gson EVENT_GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX").create();
 
     /**
      * store crid for current thread
      * <p>
      * 保存当前线程的 CRID
      */
-    private static final CridThreadLocal cridLocal = new CridThreadLocal();
+    private static final CridThreadLocal CRID_THREAD_LOCAL = new CridThreadLocal();
 
     /**
      * store path for current thread
      * <p>
      * 保存当前线程的 HTTP 路径
      */
-    private static final PathThreadLocal pathLocal = new PathThreadLocal();
+    private static final PathThreadLocal PATH_THREAD_LOCAL = new PathThreadLocal();
 
     /**
      * get correlation id for current thread
@@ -79,7 +78,7 @@ public class XLog {
      */
     @NotNull
     public static String crid() {
-        return cridLocal.get();
+        return CRID_THREAD_LOCAL.get();
     }
 
     /**
@@ -104,10 +103,10 @@ public class XLog {
     public static void setCrid(@Nullable String v) {
         v = Strings.normalize(v);
         if (v == null) {
-            cridLocal.set(Hex.randomHex16());
+            CRID_THREAD_LOCAL.set(Hex.randomHex16());
             return;
         }
-        cridLocal.set(v);
+        CRID_THREAD_LOCAL.set(v);
     }
 
     /**
@@ -116,7 +115,7 @@ public class XLog {
      * 清除当前线程的 CRID
      */
     public static void clearCrid() {
-        cridLocal.remove();
+        CRID_THREAD_LOCAL.remove();
     }
 
     /**
@@ -128,7 +127,7 @@ public class XLog {
      */
     @Nullable
     public static String path() {
-        return pathLocal.get();
+        return PATH_THREAD_LOCAL.get();
     }
 
     /**
@@ -139,7 +138,7 @@ public class XLog {
      * @param path path
      */
     public static void setPath(@Nullable String path) {
-        pathLocal.set(Strings.normalize(path));
+        PATH_THREAD_LOCAL.set(Strings.normalize(path));
     }
 
     /**
@@ -148,7 +147,7 @@ public class XLog {
      * 清除当前线程的 HTTP 路径
      */
     public static void clearPath() {
-        pathLocal.remove();
+        PATH_THREAD_LOCAL.remove();
     }
 
     /**
@@ -174,7 +173,7 @@ public class XLog {
         }
         // do the serialization and write to INFO level
         try {
-            structuredEventLogger.info(XLog.structuredEventGson.toJson(event));
+            EVENT_LOGGER.info(XLog.EVENT_GSON.toJson(event));
         } catch (Exception e) {
             LOGGER.error("failed to serialize structured event [" + event.getClass().getCanonicalName() + "]", e);
         }
@@ -188,8 +187,6 @@ public class XLog {
                 .stream(os)
                 // normalize
                 .map(Strings::normalizeKeyword)
-                // skip null
-                .filter(Objects::nonNull)
                 // join with ','
                 .collect(Collectors.joining(","))
                 + "]";

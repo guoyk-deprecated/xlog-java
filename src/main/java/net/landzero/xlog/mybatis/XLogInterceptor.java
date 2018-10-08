@@ -1,6 +1,5 @@
 package net.landzero.xlog.mybatis;
 
-import net.landzero.xlog.XLog;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.plugin.*;
@@ -29,7 +28,7 @@ public class XLogInterceptor implements Interceptor {
             event.setThrowable(e);
             throw e;
         } finally {
-            XLog.appendEvent(event.build());
+            event.commit();
         }
     }
 

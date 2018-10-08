@@ -1,5 +1,6 @@
 package net.landzero.xlog.http;
 
+import net.landzero.xlog.XLogEventBuilder;
 import net.landzero.xlog.utils.Flatten;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 
-public class AccessEventBuilder {
+public class AccessEventBuilder implements XLogEventBuilder<AccessEvent> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AccessEventBuilder.class);
 
@@ -59,6 +60,7 @@ public class AccessEventBuilder {
     }
 
     @NotNull
+    @Override
     public AccessEvent build() {
         this.event.setDuration(System.currentTimeMillis() - this.startAt);
         return this.event;

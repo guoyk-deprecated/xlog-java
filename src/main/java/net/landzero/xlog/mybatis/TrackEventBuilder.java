@@ -1,5 +1,6 @@
 package net.landzero.xlog.mybatis;
 
+import net.landzero.xlog.XLogEventBuilder;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -27,7 +28,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 
-public class TrackEventBuilder {
+public class TrackEventBuilder implements XLogEventBuilder<TrackEvent> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TrackEventBuilder.class);
 
@@ -187,6 +188,7 @@ public class TrackEventBuilder {
     }
 
     @NotNull
+    @Override
     public TrackEvent build() {
         this.event.setDuration(System.currentTimeMillis() - this.startTime);
         return this.event;

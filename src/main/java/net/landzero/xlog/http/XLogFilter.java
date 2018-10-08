@@ -43,7 +43,7 @@ public class XLogFilter implements Filter {
             chain.doFilter(request, response);
             event.setServletResponse(response);
         } finally {
-            XLog.appendEvent(event.build());
+            event.commit();
             resetXLog();
         }
     }
